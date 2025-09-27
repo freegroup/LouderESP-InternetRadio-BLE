@@ -1,0 +1,11 @@
+{
+    "github.copilot.advanced": {
+        
+    },
+    "files.associations": {
+        "new": "cpp",
+        "*.cpp_01": "cpp",
+        "*.cpp_02": "cpp",
+        "*.cpp_orig": "cpp"
+    }
+}
