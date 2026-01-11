@@ -35,7 +35,6 @@ BluetoothA2DPOutputLegacy *i2s_output_bluetooth = nullptr;
 WiFiManager wm;
 
 String current_radio_url = "";
-bool is_bass_boost_active = false;
 bool radio_is_playing = false;
 
 const char* radio_urls[] = {
@@ -54,7 +53,7 @@ AudioMode active_mode;
 // --- Funktions-Deklarationen ---
 void handleModeChange(AudioMode new_mode, String url);
 
-// Wir reaktivieren den Callback aus einem früheren Schritt und passen ihn an
+
 void connection_state_callback(esp_a2d_connection_state_t state, void *object) {
     if (state == ESP_A2D_CONNECTION_STATE_CONNECTED) {
         // Hole die Adresse des aktuell verbundenen Geräts
@@ -126,16 +125,7 @@ void startRadioStream() {
     buffer = new AudioFileSourceBuffer(file_stream, 16384);
     mp3_player = new AudioGeneratorMP3();
 
-    AudioOutput* final_output;
-    if (is_bass_boost_active) {
-        Serial.println("Audio-Ziel: Bass-Boost -> I2S");
-        final_output = bass_boost;
-    } else {
-        Serial.println("Audio-Ziel: Direkter I2S-Ausgang (Bypass)");
-        final_output = i2s_output_radio;
-    }
-
-    if (mp3_player->begin(buffer, final_output)) {
+    if (mp3_player->begin(buffer, i2s_output_radio)) {
         radio_is_playing = true;
         Serial.println("Radio-Stream erfolgreich gestartet.");
     } else {
@@ -145,7 +135,7 @@ void startRadioStream() {
 }
 
 
-// Die Funktion heißt jetzt handleModeChange und ist intelligenter.
+
 void handleModeChange(AudioMode new_mode, String url) {
     if (new_mode == MODE_IDLE) {
         Serial.println("Wechsle in den IDLE-Modus: Kein WLAN, nur BT im Lauschmodus.");
@@ -173,7 +163,6 @@ void handleModeChange(AudioMode new_mode, String url) {
         Serial.println("=> Weicher Senderwechsel wird durchgeführt (kein Neustart)...");
         if (url == current_radio_url) {
             Serial.println("Gleicher Sender: Schalte Bass-Boost um...");
-            is_bass_boost_active = !is_bass_boost_active; // Zustand umkehren
             startRadioStream();
         } else {
             current_radio_url = url;
