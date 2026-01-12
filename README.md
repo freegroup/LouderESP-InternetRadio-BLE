@@ -30,7 +30,7 @@ The ESP32 **cannot run WiFi and Bluetooth simultaneously in full operation**. Th
 **What Happens:**
 - ESP32 acts as Bluetooth speaker
 - Receives audio from paired device
-- Volume controlled via rotary encoder
+- Volume controlled via phone **AND** rotary encoder (synchronized)
 
 ## 🔀 How Mode Switching Works
 
