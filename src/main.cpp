@@ -9,7 +9,6 @@
 #include "AudioOutputI2S.h"
 
 #include "BluetoothA2DPSink.h"
-#include "BluetoothA2DPSink.h"
 #include "BluetoothA2DPOutput.h"
 
 #include "buttons.h"

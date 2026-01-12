@@ -9,7 +9,6 @@ static unsigned long debounceDelay = 50;
 int handle_button() {
     int rawValue = analogRead(BUTTON_ADC_PIN);
     int reading;
-    Serial.println(rawValue);
     // Schwellenwerte, passend zu den Widerständen (1k, 10k, 100k)
     if (rawValue < 100) {       // Schwellenwert für Taste 1
         reading = 1; 
