@@ -13,8 +13,7 @@
 
 #include "buttons.h"
 #include "encoder.h"
-#include "amplifier.h" 
-#include "bass_boost.h"
+#include "amplifier.h"
 
 // --- Globale Objekte ---
 Preferences preferences;
@@ -25,7 +24,6 @@ AudioFileSourceICYStream *file_stream = nullptr;
 AudioFileSourceBuffer *buffer = nullptr;
 AudioGeneratorMP3 *mp3_player = nullptr;
 AudioOutputI2S *i2s_output_radio = nullptr;
-AudioEffectBassBoost* bass_boost = nullptr;
 
 // Bluetooth-spezifische Objekte
 BluetoothA2DPSink a2dp_sink;
@@ -161,7 +159,7 @@ void handleModeChange(AudioMode new_mode, String url) {
     if (active_mode == MODE_RADIO && new_mode == MODE_RADIO) {
         Serial.println("=> Weicher Senderwechsel wird durchgeführt (kein Neustart)...");
         if (url == current_radio_url) {
-            Serial.println("Gleicher Sender: Schalte Bass-Boost um...");
+            Serial.println("Gleicher Sender wird neu gestartet...");
             startRadioStream();
         } else {
             current_radio_url = url;
@@ -270,8 +268,6 @@ void setup() {
         i2s_output_radio->SetPinout(PIN_I2S_SCK, PIN_I2S_FS, PIN_I2S_SD);
 
         i2s_output_radio->begin();
-
-        bass_boost = new AudioEffectBassBoost(i2s_output_radio, 10.0f, 140.0f); // dB, Hz
 
         preferences.begin("audio_config", true);
         current_radio_url = preferences.getString("radio_url", radio_urls[0]);
